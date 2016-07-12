@@ -92,4 +92,8 @@ public class MonthlyTickets {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    public void setIssueListCreator(IssueListCreator issueListCreator) {
+        this.issueListCreator = issueListCreator;
+    }
 }

@@ -4,9 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * @since 3.5
- */
 public class EstimationReportTest {
 
     @Before

@@ -1,4 +1,4 @@
-package ut.org.catrobat.jira.reports;
+package ut.org.catrobat.estimationplugin;
 
 import org.junit.After;
 import org.junit.Before;

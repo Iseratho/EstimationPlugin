@@ -6,7 +6,7 @@ import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.plugins.osgi.test.AtlassianPluginsTestRunner;
 import org.junit.runner.RunWith;
 
-@RunWith(AtlassianPluginsTestRunner.class)
+//@RunWith(AtlassianPluginsTestRunner.class)
 public class EstimationCalculatorWiredTest {
 
     private final ProjectManager projectManager;

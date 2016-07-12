@@ -5,9 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Ignore;
 import org.junit.Test;
 
-/**
- * Created by iseratho on 21/10/15.
- */
 public class MyComponentTrdTest
 {
     @Ignore
