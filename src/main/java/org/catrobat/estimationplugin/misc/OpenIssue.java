@@ -5,6 +5,7 @@ import com.atlassian.jira.issue.CustomFieldManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.customfields.option.Option;
 import com.atlassian.jira.issue.fields.CustomField;
+import org.catrobat.estimationplugin.helper.HtmlHelper;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -47,6 +48,11 @@ public class OpenIssue {
 
     public Timestamp getCreated() {
         return issue.getCreated();
+    }
+
+    public String getHTMLLink() {
+        String url = "/jira/browse/" + issue.getKey(); //TODO change to jira base url
+        return HtmlHelper.getHtmlLink(url, issue.getKey(), issue.getDescription());
     }
 
 
