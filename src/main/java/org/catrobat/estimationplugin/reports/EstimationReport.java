@@ -92,6 +92,6 @@ public class EstimationReport extends AbstractReport {
             action.addError("selectedProjectId", action.getText("estimation-report.projectid.invalid"));
         if (userGroup != "none" && GroupHelper.getCountOfGroup(userGroup) < 1)
             action.addError("usergroup", "error no users in group");
-        //TODO: check wether user group contains members
+        //TODO: check whether user group contains members
     }
 }

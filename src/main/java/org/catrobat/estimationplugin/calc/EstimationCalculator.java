@@ -27,9 +27,6 @@ public class EstimationCalculator {
     private final ProjectManager projectManager;
     private final DateTimeFormatter dateTimeFormatter;
 
-    private double ticketsPerDay;
-    private double averageTicketDurationDays;
-
     private List<String> openIssuesStatus = new ArrayList<String>();
     private List<String> finishedIssuesStatus = new ArrayList<String>();
     private CustomField estimationField;
@@ -63,18 +60,11 @@ public class EstimationCalculator {
         estimationSMLField = customFieldManager.getCustomFieldObjectByName("Effort");
     }
 
-    public void calculateTicketsPerDay() {
-        ticketsPerDay = finishedIssueListClass.getFinishedIssueCount()/((double)finishedIssueListClass.getProjectDurationFromStart());
-        averageTicketDurationDays = finishedIssueListClass.getDaysTicketsWhereOpened()/((double)finishedIssueListClass.getFinishedIssueCount());
-    }
-
     public Map<String, Object> prepareMap() {
-        calculateTicketsPerDay();
-
         Date today = new Date();
         long openIssues = openIssueListClass.getOpenIssueCount();
         long openCost = openIssueListClass.getOpenIssueCost();
-        double daysToFinish = openIssues / ticketsPerDay;
+        double daysToFinish = openIssues / finishedIssueListClass.getTicketsPerDay();
         long daysToFinishRounded = Math.round(daysToFinish);
         Calendar finishDate = Calendar.getInstance();
         finishDate.setTime(today);
@@ -90,6 +80,7 @@ public class EstimationCalculator {
         data.put("ticketsPerDay", ticketsPerDay);
         data.put("costMap", costMap);
         data.put("smlMap", smlMap);
+        double averageTicketDurationDays = finishedIssueListClass.getAverageTicketDurationDays();
         data.put("avgDaysOpened", averageTicketDurationDays);
         data.put("avgDaysOpenedNew", DateHelper.convertMillisToDays((long)finishedIssueListClass.getDurationStatistics().getMean()));
         finishDate.setTime(today);

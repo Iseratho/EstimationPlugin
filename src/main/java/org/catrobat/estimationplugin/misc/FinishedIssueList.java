@@ -69,4 +69,12 @@ public class FinishedIssueList {
         long days = (today.getTime() - start)/(1000 * 60 * 60 * 24);
         return  days;
     }
+
+    public double getTicketsPerDay() {
+        return getFinishedIssueCount()/((double)getProjectDurationFromStart());
+    }
+
+    public double getAverageTicketDurationDays() {
+        return getDaysTicketsWhereOpened()/((double)getFinishedIssueCount());
+    }
 }
