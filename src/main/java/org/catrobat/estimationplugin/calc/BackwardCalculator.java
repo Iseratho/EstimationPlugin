@@ -6,9 +6,9 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.user.ApplicationUser;
+import org.catrobat.estimationplugin.helper.StatisticsHelper;
 import org.catrobat.estimationplugin.jql.IssueListCreator;
 import org.catrobat.estimationplugin.misc.FinishedIssueList;
-import org.catrobat.estimationplugin.misc.OpenIssue;
 import org.catrobat.estimationplugin.misc.OpenIssueList;
 
 import java.util.*;
@@ -37,10 +37,11 @@ public class BackwardCalculator {
     public Map<String, Object> prepareMap(OpenIssueList openIssueList, FinishedIssueList finishedIssueList, Date deadline) {
         Map<String, Object> data = new HashMap<String, Object>();
         long accomplishable = finishedIssueList.calculateCountOfAccomplishableTicketsTillDate(deadline);
-        List<OpenIssue> oldestAccomplishableIssues = openIssueList.getOldestIssues((int)accomplishable);
-        data.put("issuesToBeFinished", oldestAccomplishableIssues);
+        List<String> oldestAccomplishableIssues = openIssueList.getOldestIssuesLinks((int)accomplishable);
+        data.put("issuesToBeFinishedAsHtml", oldestAccomplishableIssues);
         data.put("log", issueListCreator.getQueryLog());
         data.put("count", accomplishable);
+        //data.put("test2", StatisticsHelper.testingStuff(finishedIssueList.getDurationStatisticsDescriptive()));
         return data;
     }
 
