@@ -12,7 +12,9 @@ import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.user.ApplicationUser;
+import com.google.gson.Gson;
 import org.catrobat.estimationplugin.helper.DateHelper;
+import org.catrobat.estimationplugin.helper.StatisticsHelper;
 import org.catrobat.estimationplugin.jql.IssueListCreator;
 import org.catrobat.estimationplugin.misc.FinishedIssueList;
 import org.catrobat.estimationplugin.misc.OpenIssueList;
@@ -96,6 +98,13 @@ public class EstimationCalculator {
         data.put("projectStart", dateTimeFormatter.format(finishedIssueListClass.getProjectStartDate()));
         data.put("openIssueList", openIssueListClass.getOpenIssueList());
         data.put("queryLog", issueListCreator.getQueryLog());
+
+        SortedMap bellCurveMap = StatisticsHelper.getBellCurveMap(finishedIssueListClass.getDurationStatistics());
+
+        List<Date> dateList = DateHelper.convertLongCollectionToDateList(bellCurveMap.keySet());
+        String json = new Gson().toJson(dateList);
+        data.put("bellCurveMapKeys", json);
+        data.put("bellCurveMapValues", bellCurveMap.values());
 
         return data;
     }

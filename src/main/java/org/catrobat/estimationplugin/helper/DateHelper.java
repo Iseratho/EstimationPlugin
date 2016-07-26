@@ -1,7 +1,6 @@
 package org.catrobat.estimationplugin.helper;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 public class DateHelper {
 
@@ -39,6 +38,14 @@ public class DateHelper {
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, 1);
         return getEndOfMonth(calendar.getTime());
+    }
+
+    public static List<Date> convertLongCollectionToDateList(Collection<Long> collection) {
+        List<Date> dateList = new ArrayList<>();
+        for(Long a : collection) {
+            dateList.add(new Date(a));
+        }
+        return dateList;
     }
 
     public static long convertMillisToDays(long millis) {

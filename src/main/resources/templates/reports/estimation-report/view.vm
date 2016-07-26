@@ -1,3 +1,5 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <div style="padding: 5px">
 <!-- Display the report configuration -->
 <h4>
@@ -23,9 +25,41 @@ Cost Map value: $costMap
 <p>
 SML Map values: $smlMap
 </p>
+
+<canvas id="myChart" width="1200" height="400"></canvas>
+
+<script>
+(function(){
+var ctx = document.getElementById("myChart").getContext("2d");
+#set($bellCurveMapKeysWithHtml = $bellCurveMapKeys)
+
+var data = {
+    labels: $bellCurveMapKeysWithHtml,
+    datasets: [
+        {
+            label: "Probability of finishing",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: $bellCurveMapValues
+        }
+    ]
+};
+var myLineChart = new Chart(ctx).Line(data);
+})();
+</script>
+
+
+
+
 <h5>
 Debug
 </h5>
+<p> Keys for Chart: $bellCurveMapKeys </p>
+<p> Values for Chart: $bellCurveMapValues </p>
 <p>
 $avgDaysOpened == $avgDaysOpenedNew
 </p>

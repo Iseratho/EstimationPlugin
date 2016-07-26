@@ -14,13 +14,14 @@ public class GroupValuesGenerator implements ValuesGenerator{
     @Override
     public Map getValues(Map map) {
         Map<String, String> groupMap = new HashMap<String, String>();
-        groupMap.put("none", "none considered");
+        //groupMap.put("none considered", "none considered");
         GroupManager groupManager = ComponentAccessor.getGroupManager();
         Collection<Group> groupsCollection = groupManager.getAllGroups();
         for (Group group : groupsCollection) {
             String groupName = group.getName();
             groupMap.put(groupName, groupName);
         }
+        //groupMap.put("test", "test");
         return groupMap;
     }
 }
