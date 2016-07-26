@@ -1,13 +1,9 @@
 package org.catrobat.estimationplugin.reports;
 
-import com.atlassian.crowd.embedded.api.Group;
-import com.atlassian.crowd.embedded.api.User;
-import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.datetime.DateTimeFormatterFactory;
 import com.atlassian.jira.issue.IssueManager;
 import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.plugin.report.impl.AbstractReport;
-import com.atlassian.jira.security.groups.GroupManager;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.web.action.ProjectActionSupport;
 import com.atlassian.jira.project.ProjectManager;
@@ -18,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.catrobat.estimationplugin.calc.EstimationCalculator;
 import org.catrobat.estimationplugin.helper.GroupHelper;
 
-import java.util.Collection;
 import java.util.Map;
 
 public class EstimationReport extends AbstractReport {
@@ -55,7 +50,7 @@ public class EstimationReport extends AbstractReport {
             numprog = (long) GroupHelper.getCountOfGroup(userGroup);
         }
 
-        EstimationCalculator estimationCalculator = new EstimationCalculator(projectManager, searchProvider, remoteUser, formatterFactory);
+        EstimationCalculator estimationCalculator = new EstimationCalculator(searchProvider, remoteUser, formatterFactory);
         Map<String, Object> velocityParams;
 
         if (filterOrProjectId.startsWith("project-")) {

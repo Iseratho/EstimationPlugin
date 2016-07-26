@@ -185,9 +185,22 @@
     <properties>
         <property>
           <key>projectid</key>
-          <name>estimation-report.projectid.name</name>
-          <description>estimation-report.projectid.description</description>
+          <name>estimation-backward.projectid.name</name>
+          <description>estimation-backward.projectid.description</description>
           <type>filterprojectpicker</type>
+        </property>
+        <property>
+            <key>finishDate</key>
+            <name>estimation-backward.finishDate.name</name>
+            <description>estimation-backward.finishDate.description</description>
+            <type>date</type>
+          </property>
+        <property>
+          <key>probability</key>
+          <name>estimation-backward.probability</name>
+          <description>estimation-backward.probability.description</description>
+          <type>long</type>
+          <default>80</default>
         </property>
         <!--property>
             <key>versionId</key>

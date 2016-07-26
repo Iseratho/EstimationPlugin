@@ -23,8 +23,6 @@ import java.util.*;
 
 
 public class EstimationCalculator {
-
-    private final ProjectManager projectManager;
     private final DateTimeFormatter dateTimeFormatter;
 
     private List<String> openIssuesStatus = new ArrayList<String>();
@@ -40,9 +38,8 @@ public class EstimationCalculator {
     private Map<String, Long> costMap; //debug only
     private Map<String, Long> smlMap; //debug only
 
-    public EstimationCalculator(ProjectManager projectManager, SearchProvider searchProvider, ApplicationUser user,
+    public EstimationCalculator(SearchProvider searchProvider, ApplicationUser user,
                                 DateTimeFormatterFactory formatterFactory) {
-        this.projectManager = projectManager;
         issueListCreator = new IssueListCreator(searchProvider, user);
         this.dateTimeFormatter = formatterFactory.formatter().withStyle(DateTimeStyle.ISO_8601_DATE);
 

@@ -6,6 +6,9 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.customfields.option.Option;
 import com.atlassian.jira.issue.fields.CustomField;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.Date;
 
 public class OpenIssue {
@@ -27,7 +30,6 @@ public class OpenIssue {
     public OpenIssue(Issue issue) {
         this.issue = issue;
         extractData();
-
     }
 
     private void extractData() {
@@ -41,5 +43,26 @@ public class OpenIssue {
 
     public String getEstimation() {
         return estimation;
+    }
+
+    public Timestamp getCreated() {
+        return issue.getCreated();
+    }
+
+
+    static class CreatedComparator implements Comparator<OpenIssue> {
+
+        @Override
+        public int compare(OpenIssue o1, OpenIssue o2) {
+            long t1 = o1.getCreated().getTime();
+            long t2 = o2.getCreated().getTime();
+            if (t2 > t1) {
+                return 1;
+            } else if (t1 > t2) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
     }
 }

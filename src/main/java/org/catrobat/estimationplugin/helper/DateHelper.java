@@ -48,6 +48,11 @@ public class DateHelper {
         return dateList;
     }
 
+    public static long daysUntil(Date targetDate) {
+        long millis = targetDate.getTime() - (new Date()).getTime();
+        return convertMillisToDays(millis);
+    }
+
     public static long convertMillisToDays(long millis) {
         return millis/(1000 * 60 * 60 * 24);
     }

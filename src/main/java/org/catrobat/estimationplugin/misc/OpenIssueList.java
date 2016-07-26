@@ -58,4 +58,14 @@ public class OpenIssueList {
         }
         return sumEstimates;
     }
+
+    public List<OpenIssue> getOldestIssues(int amount) {
+        List<OpenIssue> openIssues = openIssueList; //TODO check whether does is a deep or shallow copy
+        openIssues.sort(new OpenIssue.CreatedComparator());
+        List<OpenIssue> oldestIssues = new ArrayList<>();
+        for (int i = 0; i < amount && i < openIssues.size(); i++) { //TODO solve with iterator
+            oldestIssues.add(openIssues.get(i));
+        }
+        return oldestIssues;
+    }
 }

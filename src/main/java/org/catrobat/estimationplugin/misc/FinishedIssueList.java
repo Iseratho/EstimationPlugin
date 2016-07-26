@@ -63,6 +63,12 @@ public class FinishedIssueList {
         return new Date(minCreated);
     }
 
+    public long calculateCountOfAccomplishableTicketsTillDate(Date deadline) {
+        long daysTillDeadline = DateHelper.daysUntil(deadline);
+        double ticketsPerDay = getTicketsPerDay();
+        return (long)Math.floor(daysTillDeadline * ticketsPerDay);
+    }
+
     public long getProjectDurationFromStart() {
         long start = getProjectStartDate().getTime();
         Date today = new Date();
