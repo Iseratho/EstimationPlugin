@@ -39,6 +39,14 @@ public class DateHelperUnitTest {
     }
 
     @Test
-    public void getEndOfNextMonth() {
+    public void testGetEndOfNextMonth() {
+    }
+
+    @Test
+    public void testDaysUntil() {
+        long testval = 5;
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, (int)testval);
+        assertEquals(DateHelper.daysUntil(cal.getTime()), testval);
     }
 }

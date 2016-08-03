@@ -1,0 +1,8 @@
+/* The following is used for info boxes */
+#parent #popup {
+  display: none;
+}
+
+#parent:hover #popup {
+  display: block;
+}

@@ -1,17 +1,9 @@
-<h1>view.vm</h1>
+<p>These issues will likely be finished in time: $issuesToBeFinishedAsHtml</p>
 
-<h2>hello</h2>
-
-<p>$test</p>
-
-<p>$issuesToBeFinishedAsHtml</p>
+<p>$removeCount issues should be put back to finish in time</p>
 
 <p>$count</p>
-
-<p>$countOpen</p>
 
 <p>$projectName</p>
 
 <p>$log</p>
-
-<p>$test2</p>

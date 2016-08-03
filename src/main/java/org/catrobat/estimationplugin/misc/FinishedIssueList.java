@@ -1,13 +1,11 @@
 package org.catrobat.estimationplugin.misc;
 
 import com.atlassian.jira.issue.Issue;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.catrobat.estimationplugin.helper.DateHelper;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class FinishedIssueList {
 
@@ -31,6 +29,14 @@ public class FinishedIssueList {
             summaryStatistics.addValue(finishedIssue.getWorkDuration());
         }
         return summaryStatistics;
+    }
+
+    public DescriptiveStatistics getDurationStatisticsDescriptive() {
+        DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
+        for(FinishedIssue finishedIssue : finishedIssueList) {
+            descriptiveStatistics.addValue(finishedIssue.getWorkDuration());
+        }
+        return descriptiveStatistics;
     }
 
     // TODO: change to be based on date put into backlog
@@ -73,7 +79,7 @@ public class FinishedIssueList {
         long start = getProjectStartDate().getTime();
         Date today = new Date();
         long days = (today.getTime() - start)/(1000 * 60 * 60 * 24);
-        return  days;
+        return days;
     }
 
     public double getTicketsPerDay() {
@@ -82,5 +88,46 @@ public class FinishedIssueList {
 
     public double getAverageTicketDurationDays() {
         return getDaysTicketsWhereOpened()/((double)getFinishedIssueCount());
+    }
+
+    public int getAssigneeCount() {
+        Set<String> users = new HashSet<String>();
+        for(FinishedIssue finishedIssue : finishedIssueList) {
+            users.add(finishedIssue.getAssignee());
+        }
+        return users.size();
+    }
+
+    public double getIssueOverlappingFactor() {
+        long projectDuration = getProjectDurationFromStart();
+        long workDuration = 0;
+        for(FinishedIssue finishedIssue : finishedIssueList) {
+            workDuration += finishedIssue.getWorkDuration();
+        }
+        return DateHelper.convertMillisToDays(workDuration)/(double)projectDuration;
+    }
+
+    @DebugAnnotation
+    public String getChangeHistoryExample() {
+        return finishedIssueList.get(0).getChangeHistoryString();
+    }
+
+    @DebugAnnotation
+    public String getStringOfParticipatingUsersCount() {
+        String stringOfParticipatingUsers = "";
+        for(FinishedIssue finishedIssue : finishedIssueList) {
+            stringOfParticipatingUsers += finishedIssue.getUsersParticipatingCount() + " + ";
+        }
+        return stringOfParticipatingUsers;
+    }
+
+    //TODO calculation is bullshit
+    public double getAverageWorkingStudents() {
+        long projectDuration = getProjectDurationFromStart();
+        long workDurationTimesMembers = 0;
+        for(FinishedIssue finishedIssue : finishedIssueList) {
+            workDurationTimesMembers += finishedIssue.getWorkDuration() * finishedIssue.getUsersParticipatingCount();
+        }
+        return DateHelper.convertMillisToDays(workDurationTimesMembers)/(double)projectDuration;
     }
 }

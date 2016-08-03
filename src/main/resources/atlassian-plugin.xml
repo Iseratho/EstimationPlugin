@@ -125,6 +125,13 @@
           </value>
         </values>
       </property>
+      <property>
+        <key>probability</key>
+        <name>estimation-forward.probability</name>
+        <description>estimation-forward.probability.description</description>
+        <type>long</type>
+        <default>50</default>
+      </property>
       <!--<property>
         <key>studis</key>
         <name>estimation-report.studis</name>

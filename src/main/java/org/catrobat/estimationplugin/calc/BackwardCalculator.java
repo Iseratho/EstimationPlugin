@@ -6,7 +6,6 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.user.ApplicationUser;
-import org.catrobat.estimationplugin.helper.StatisticsHelper;
 import org.catrobat.estimationplugin.jql.IssueListCreator;
 import org.catrobat.estimationplugin.misc.FinishedIssueList;
 import org.catrobat.estimationplugin.misc.OpenIssueList;
@@ -41,7 +40,7 @@ public class BackwardCalculator {
         data.put("issuesToBeFinishedAsHtml", oldestAccomplishableIssues);
         data.put("log", issueListCreator.getQueryLog());
         data.put("count", accomplishable);
-        //data.put("test2", StatisticsHelper.testingStuff(finishedIssueList.getDurationStatisticsDescriptive()));
+        data.put("removeCount", openIssueList.getOpenIssueCount() - accomplishable);
         return data;
     }
 

@@ -1,8 +1,10 @@
 package org.catrobat.estimationplugin.helper;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
+import java.util.Date;
 import java.util.SortedMap;
 import java.util.TreeMap;
 

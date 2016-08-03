@@ -71,6 +71,8 @@ public class EstimationCalculator {
         data.put("openIssues", openIssues);
         data.put("openCost", openCost);
         data.put("finishDate", dateTimeFormatter.format(finishDate.getTime()));
+
+        // Uncertainty is probably false
         data.put("uncertainty", DateHelper.convertMillisToDays((long)finishedIssueListClass.getDurationStatistics().getStandardDeviation())/7);
         String ticketsPerDay = String.valueOf(finishedIssueListClass.getFinishedIssueCount()) +
                 "/" +  String.valueOf(finishedIssueListClass.getDaysTicketsWhereOpened() + "/" + String.valueOf(finishedIssueListClass.getProjectDurationFromStart()));
@@ -79,6 +81,8 @@ public class EstimationCalculator {
         data.put("smlMap", smlMap);
         double averageTicketDurationDays = finishedIssueListClass.getAverageTicketDurationDays();
         data.put("avgDaysOpened", averageTicketDurationDays);
+
+        // 50% probability
         data.put("avgDaysOpenedNew", DateHelper.convertMillisToDays((long)finishedIssueListClass.getDurationStatistics().getMean()));
         finishDate.setTime(today);
         finishDate.add(Calendar.DATE,(int)Math.round(averageTicketDurationDays));
@@ -94,6 +98,10 @@ public class EstimationCalculator {
         data.put("bellCurveMapKeys", json);
         data.put("bellCurveMapValues", bellCurveMap.values());
 
+        data.put("assigneeCount", finishedIssueListClass.getAssigneeCount());
+        data.put("overlapFactor", finishedIssueListClass.getIssueOverlappingFactor());
+
+        data.put("testing", finishedIssueListClass.getAverageWorkingStudents());
         return data;
     }
 

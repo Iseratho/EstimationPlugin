@@ -31,8 +31,6 @@ public class EstimationPluginBackward extends AbstractReport {
         Date finishDate = ParameterUtils.getDateParam(params, "finishDate", Locale.ENGLISH);
         //TODO make work for non current project or filter
 
-
-
         ApplicationUser applicationUser = projectActionSupport.getLoggedInApplicationUser();
         BackwardCalculator backwardCalculator = new BackwardCalculator(searchProvider, applicationUser);
 
@@ -55,7 +53,6 @@ public class EstimationPluginBackward extends AbstractReport {
 
 
         velocityParams.put("projectName", projectManager.getProjectObj(projectId).getName());
-        velocityParams.put("test", "something new 2");
         return descriptor.getHtml("view", velocityParams);
     }
 

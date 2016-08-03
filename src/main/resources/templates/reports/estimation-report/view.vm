@@ -1,4 +1,4 @@
-
+$webResourceManager.requireResourcesForContext("estimationplugin")
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <div style="padding: 5px">
 <!-- Display the report configuration -->
@@ -77,6 +77,12 @@ Based on Average Duration
 <p>
 Average Days Opened: $avgDaysOpened . Projected finish date: $avgFinishDate
 </p>
+
+<p> Assignee Count: $assigneeCount </p>
+<p> Overlapping Factor: $overlapFactor </p>
+
+<p> $testing </p>
+
 <br />
 <!--<table style="width: 100%; border: 0; background-color: lightgrey">
     <tr valign="bottom" style="background-color: white; padding: 1px">

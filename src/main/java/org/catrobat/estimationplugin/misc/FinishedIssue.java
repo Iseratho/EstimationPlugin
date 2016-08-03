@@ -4,11 +4,11 @@ import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.changehistory.ChangeHistory;
 import com.atlassian.jira.issue.changehistory.ChangeHistoryManager;
+import com.atlassian.jira.user.ApplicationUser;
 import org.ofbiz.core.entity.GenericValue;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class FinishedIssue {
 
@@ -57,4 +57,39 @@ public class FinishedIssue {
     public long getWorkDuration() {
         return workDuration;
     }
+
+    public String getAssignee() {
+        return issue.getAssigneeId();
+    }
+
+    public Set<ApplicationUser> getUsersParticipating() {
+        Set<ApplicationUser> participatingUsers = new HashSet<>();
+        ChangeHistoryManager changeHistoryManager = ComponentAccessor.getChangeHistoryManager();
+        List<ChangeHistory> issueHistory = changeHistoryManager.getChangeHistories(issue);
+        for(ChangeHistory changeHistory : issueHistory) {
+            ApplicationUser user = changeHistory.getAuthorObject();
+            participatingUsers.add(user);
+        }
+        return participatingUsers;
+    }
+
+    public int getUsersParticipatingCount() {
+        return getUsersParticipating().size();
+    }
+
+    @DebugAnnotation
+    public String getChangeHistoryString() {
+        String changeHistoryString = "";
+        ChangeHistoryManager changeHistoryManager = ComponentAccessor.getChangeHistoryManager();
+        List<ChangeHistory> issueHistory = changeHistoryManager.getChangeHistories(issue);
+        for(ChangeHistory changeHistory : issueHistory) {
+            List<GenericValue> changeItem = changeHistory.getChangeItems();
+            for(GenericValue genericValue : changeItem) {
+                changeHistoryString += genericValue.toString() + "\n";
+            }
+        }
+        return changeHistoryString;
+    }
+
+
 }
