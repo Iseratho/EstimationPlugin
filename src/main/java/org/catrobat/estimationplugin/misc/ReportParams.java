@@ -32,11 +32,15 @@ public class ReportParams {
     private CustomField estimationField;
     private CustomField estimationSMLField;
 
+    // Debug
+    private boolean numProgrammersEnabled;
+
     public ReportParams(SearchProvider searchProvider, ApplicationUser remoteUser, DateTimeFormatterFactory formatterFactory) {
         this.searchProvider = searchProvider;
         this.remoteUser = remoteUser;
         this.formatterFactory = formatterFactory;
         loadReportParamsFromAdminInterface();
+        loadStaticVariables();
     }
 
     public void setConfigureParams(boolean isFilter, Long projectOrFilterId, Long numProgrammers) {
@@ -58,6 +62,10 @@ public class ReportParams {
         removeOutliersEnabled = true;
         removeOutliersDays = 365;
         removeOutliersStatus.add("Backlog");
+    }
+
+    private void loadStaticVariables() {
+        numProgrammersEnabled = true;
     }
 
     public SearchProvider getSearchProvider() {
@@ -110,5 +118,9 @@ public class ReportParams {
 
     public CustomField getEstimationSMLField() {
         return estimationSMLField;
+    }
+
+    public boolean isNumProgrammersEnabled() {
+        return numProgrammersEnabled;
     }
 }

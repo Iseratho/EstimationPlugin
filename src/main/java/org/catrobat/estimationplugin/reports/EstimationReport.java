@@ -47,7 +47,7 @@ public class EstimationReport extends AbstractReport {
         Long numprog = ParameterUtils.getLongParam(params, "numprog");
 
         String userGroup = ParameterUtils.getStringParam(params, "usergroup");
-        if (userGroup != "none considered" && userGroup != "test") {
+        if (userGroup != "none considered" && userGroup != "test" && numprog == 0) {
             numprog = (long) GroupHelper.getCountOfGroup(userGroup);
         }
 
@@ -84,7 +84,7 @@ public class EstimationReport extends AbstractReport {
         Long projectId = ParameterUtils.getLongParam(params, "selectedProjectId");
         String userGroup = ParameterUtils.getStringParam(params, "usergroup");
 
-        if (numprog == null || numprog.longValue() <= 0)
+        if (numprog == null || numprog.longValue() < 0)
             action.addError("interval", action.getText("estimation-report.interval.invalid"));
         if (projectId == null)
             action.addError("selectedProjectId", action.getText("estimation-report.projectid.invalid"));

@@ -40,6 +40,9 @@ public class EstimationCalculator {
         long openIssues = openIssueListClass.getOpenIssueCount();
         long openCost = openIssueListClass.getOpenIssueCost();
         double daysToFinish = openIssues / finishedIssueListClass.getTicketsPerDay();
+        if (reportParams.isNumProgrammersEnabled()) {
+            daysToFinish = daysToFinish * finishedIssueListClass.getAverageWorkingStudents() / reportParams.getNumProgrammers();
+        }
         long daysToFinishRounded = Math.round(daysToFinish);
         Calendar finishDate = Calendar.getInstance();
         finishDate.setTime(today);

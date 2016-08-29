@@ -52,7 +52,7 @@
         <name>estimation-report.numprog</name>
         <description>estimation-report.numprog.description</description>
         <type>long</type>
-        <default>1</default>
+        <default>0</default>
       </property>
       <property>
         <key>usergroup</key>
