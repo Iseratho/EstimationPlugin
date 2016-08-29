@@ -164,7 +164,7 @@
     </build>
     <properties>
         <jira.version>6.4.12</jira.version>
-        <amps.version>6.2.4</amps.version>
+        <amps.version>6.2.6</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <quick.reload.version>1.30.5</quick.reload.version>
         <!-- TestKit version 6.x for JIRA 6.x -->
