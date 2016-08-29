@@ -3,6 +3,7 @@ package ut.org.catrobat.estimationplugin;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.datetime.DateTimeFormatterFactory;
 import com.atlassian.jira.datetime.DateTimeStyle;
+import com.atlassian.jira.issue.CustomFieldManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.changehistory.ChangeHistory;
 import com.atlassian.jira.issue.changehistory.ChangeHistoryManager;
@@ -12,6 +13,7 @@ import com.atlassian.jira.mock.component.MockComponentWorker;
 import com.atlassian.jira.user.ApplicationUser;
 import org.catrobat.estimationplugin.calc.MonthlyTickets;
 import org.catrobat.estimationplugin.jql.IssueListCreator;
+import org.catrobat.estimationplugin.misc.ReportParams;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +60,11 @@ public class MonthlyTicketsTest {
         Mockito.when(formatterFactory.formatter()).thenReturn(dateTimeFormatter);
         Mockito.when(dateTimeFormatter.withStyle(DateTimeStyle.ISO_8601_DATE)).thenReturn(dateTimeFormatter);
         Mockito.when(dateTimeFormatter.format(Matchers.any())).thenReturn("teststring");
-        monthlyTickets = new MonthlyTickets(searchProvider, applicationUser, formatterFactory);
+        CustomFieldManager customFieldManager = Mockito.mock(CustomFieldManager.class);
+        Mockito.when(ComponentAccessor.getCustomFieldManager()).thenReturn(customFieldManager);
+        ReportParams reportParams = new ReportParams(searchProvider, applicationUser, formatterFactory);
+        reportParams.setConfigureParams(false, new Long(0), new Long(0));
+        monthlyTickets = new MonthlyTickets(reportParams);
         issueListCreator = Mockito.mock(IssueListCreator.class);
         List<Issue> finishedIssueList = new ArrayList<>();
         Issue issue1 = Mockito.mock(Issue.class);
@@ -81,7 +87,7 @@ public class MonthlyTicketsTest {
 
     @Test
     public void testCalculateTicketsPerMonth() throws  SearchException {
-        monthlyTickets.calculateTicketsPerMonth(new Long(0), false, new Date(), new Date());
+        monthlyTickets.calculateTicketsPerMonth(new Date(), new Date());
         return;
     }
 
@@ -89,7 +95,7 @@ public class MonthlyTicketsTest {
     public void testGetTicketsPerMonth() throws SearchException {
         monthlyTickets.setStartDate(new Date());
         monthlyTickets.setEndDate(new Date());
-        Map<String, Object> data = monthlyTickets.getTicketsPerMonth(new Long(0), false);
+        Map<String, Object> data = monthlyTickets.getTicketsPerMonth();
         assertNotNull(data);
         assert(data.size() == 5);
         assertNotNull(data.get("ticketsPerMonthList"));

@@ -4,6 +4,7 @@ import com.atlassian.configurable.ValuesGenerator;
 import com.atlassian.crowd.embedded.api.Group;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.security.groups.GroupManager;
+import org.catrobat.estimationplugin.helper.GroupHelper;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,7 +20,10 @@ public class GroupValuesGenerator implements ValuesGenerator{
         Collection<Group> groupsCollection = groupManager.getAllGroups();
         for (Group group : groupsCollection) {
             String groupName = group.getName();
-            groupMap.put(groupName, groupName);
+            int count = GroupHelper.getCountOfGroup(groupName);
+            if (count > 0) {
+                groupMap.put(groupName, groupName);
+            }
         }
         //groupMap.put("test", "test");
         return groupMap;

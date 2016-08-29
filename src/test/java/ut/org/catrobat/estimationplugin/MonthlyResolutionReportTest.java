@@ -67,7 +67,7 @@ public class MonthlyResolutionReportTest {
         MonthlyTickets monthlyTickets = PowerMockito.mock(MonthlyTickets.class);
 
         Map<String, Object> velocityParams = new HashMap();
-        Mockito.when(monthlyTickets.getTicketsPerMonth(Matchers.anyLong(), Matchers.anyBoolean())).thenReturn(velocityParams);
+        Mockito.when(monthlyTickets.getTicketsPerMonth()).thenReturn(velocityParams);
 
         String html = monthlyResolutionReport.generateReportHtml(projectActionSupport, map);
     }
