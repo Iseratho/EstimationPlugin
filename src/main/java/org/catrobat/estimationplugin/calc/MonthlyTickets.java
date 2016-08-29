@@ -10,7 +10,7 @@ import com.atlassian.jira.user.ApplicationUser;
 import com.google.gson.Gson;
 import org.catrobat.estimationplugin.helper.DateHelper;
 import org.catrobat.estimationplugin.jql.IssueListCreator;
-import org.catrobat.estimationplugin.misc.FinishedIssueList;
+import org.catrobat.estimationplugin.issue.FinishedIssueList;
 
 import java.util.*;
 

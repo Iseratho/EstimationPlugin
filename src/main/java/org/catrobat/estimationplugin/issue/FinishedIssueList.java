@@ -1,10 +1,10 @@
-package org.catrobat.estimationplugin.misc;
+package org.catrobat.estimationplugin.issue;
 
 import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.user.ApplicationUser;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.catrobat.estimationplugin.helper.DateHelper;
+import org.catrobat.estimationplugin.misc.DebugAnnotation;
 
 import java.util.*;
 

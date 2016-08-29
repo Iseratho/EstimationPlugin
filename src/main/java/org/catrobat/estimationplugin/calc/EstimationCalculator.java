@@ -1,34 +1,24 @@
 package org.catrobat.estimationplugin.calc;
 
-import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.datetime.DateTimeFormatter;
-import com.atlassian.jira.datetime.DateTimeFormatterFactory;
 import com.atlassian.jira.datetime.DateTimeStyle;
-import com.atlassian.jira.issue.CustomFieldManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.customfields.option.Option;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.search.SearchException;
-import com.atlassian.jira.issue.search.SearchProvider;
-import com.atlassian.jira.user.ApplicationUser;
 import com.google.gson.Gson;
 import org.catrobat.estimationplugin.helper.DateHelper;
 import org.catrobat.estimationplugin.helper.StatisticsHelper;
 import org.catrobat.estimationplugin.jql.IssueListCreator;
-import org.catrobat.estimationplugin.misc.FinishedIssueList;
-import org.catrobat.estimationplugin.misc.OpenIssueList;
+import org.catrobat.estimationplugin.issue.FinishedIssueList;
+import org.catrobat.estimationplugin.issue.OpenIssueList;
+import org.catrobat.estimationplugin.misc.ReportParams;
 
 import java.util.*;
 
 
 public class EstimationCalculator {
     private final DateTimeFormatter dateTimeFormatter;
-
-    private List<String> openIssuesStatus = new ArrayList<String>();
-    private List<String> finishedIssuesStatus = new ArrayList<String>();
-    private CustomField estimationField;
-    private CustomField estimationSMLField;
-
     private IssueListCreator issueListCreator;
 
     private FinishedIssueList finishedIssueListClass;
@@ -37,23 +27,12 @@ public class EstimationCalculator {
     private Map<String, Long> costMap; //debug only
     private Map<String, Long> smlMap; //debug only
 
-    public EstimationCalculator(SearchProvider searchProvider, ApplicationUser user,
-                                DateTimeFormatterFactory formatterFactory) {
-        issueListCreator = new IssueListCreator(searchProvider, user);
-        this.dateTimeFormatter = formatterFactory.formatter().withStyle(DateTimeStyle.ISO_8601_DATE);
+    private ReportParams reportParams;
 
-        loadSettings();
-    }
-
-    private void loadSettings() {
-        // TODO: change initialisation to Admin
-        openIssuesStatus.add("Backlog");
-        openIssuesStatus.add("Open");
-        openIssuesStatus.add("In Progress");
-        finishedIssuesStatus.add("Closed");
-        CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
-        estimationField = customFieldManager.getCustomFieldObjectByName("Estimated Effort");
-        estimationSMLField = customFieldManager.getCustomFieldObjectByName("Effort");
+    public EstimationCalculator(ReportParams reportParams) {
+        this.reportParams = reportParams;
+        issueListCreator = new IssueListCreator(reportParams.getSearchProvider(), reportParams.getRemoteUser());
+        this.dateTimeFormatter = reportParams.getFormatterFactory().formatter().withStyle(DateTimeStyle.ISO_8601_DATE);
     }
 
     public Map<String, Object> prepareMap() {
@@ -104,14 +83,16 @@ public class EstimationCalculator {
         return data;
     }
 
-    public Map<String, Object> calculateOutputParams(Long projectOrFilterId, boolean isFilter) throws SearchException {
-        List<Issue> openIssueList = issueListCreator.getIssueListForStatus(projectOrFilterId, openIssuesStatus, isFilter);
-        List<Issue> finishedIssueList = issueListCreator.getIssueListForStatus(projectOrFilterId, finishedIssuesStatus, isFilter);
+    public Map<String, Object> calculateOutputParams() throws SearchException {
+        List<Issue> openIssueList = issueListCreator.getIssueListForStatus(reportParams.getProjectOrFilterId(), reportParams.getOpenIssuesStatus(), reportParams.isFilter());
+        List<Issue> finishedIssueList = issueListCreator.getIssueListForStatus(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter());
         finishedIssueListClass = new FinishedIssueList(finishedIssueList);
         openIssueListClass = new OpenIssueList(openIssueList);
-        openIssueListClass.removeOutliers(365, "Backlog");
-        costMap = getMapOfEffortsFromIssueListForCustomField(openIssueList, estimationField);
-        smlMap = getMapOfEffortsFromIssueListForCustomField(openIssueList, estimationSMLField);
+        if (reportParams.isRemoveOutliersEnabled()) {
+            openIssueListClass.removeOutliers(reportParams.getRemoveOutliersDays(), reportParams.getRemoveOutliersStatus());
+        }
+        costMap = getMapOfEffortsFromIssueListForCustomField(openIssueList, reportParams.getEstimationField());
+        smlMap = getMapOfEffortsFromIssueListForCustomField(openIssueList, reportParams.getEstimationSMLField());
 
         return prepareMap();
     }

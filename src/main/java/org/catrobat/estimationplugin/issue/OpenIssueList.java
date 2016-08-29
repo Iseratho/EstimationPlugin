@@ -1,10 +1,6 @@
-package org.catrobat.estimationplugin.misc;
+package org.catrobat.estimationplugin.issue;
 
-import com.atlassian.jira.component.ComponentAccessor;
-import com.atlassian.jira.issue.CustomFieldManager;
 import com.atlassian.jira.issue.Issue;
-import com.atlassian.jira.issue.customfields.option.Option;
-import com.atlassian.jira.issue.fields.CustomField;
 import org.catrobat.estimationplugin.helper.DateHelper;
 
 import java.util.*;
@@ -71,13 +67,16 @@ public class OpenIssueList {
         return oldestIssues;
     }
 
-    public void removeOutliers(long daysSince, String statusString) {
+    public void removeOutliers(long daysSince, List<String> statusList) {
         List<OpenIssue> openIssues = new ArrayList<>(openIssueList);
         for (OpenIssue openIssue : openIssueList) {
-            Date inStatusSince = openIssue.getDatePutIntoStatus(statusString);
-            long diff = DateHelper.getDateDiff(inStatusSince, new Date(), TimeUnit.DAYS);
-            if (diff > daysSince) {
-                openIssues.remove(openIssue);
+            for(String statusString : statusList) {
+                Date inStatusSince = openIssue.getDatePutIntoStatus(statusString);
+                long diff = DateHelper.getDateDiff(inStatusSince, new Date(), TimeUnit.DAYS);
+                if (diff > daysSince) {
+                    openIssues.remove(openIssue);
+                    break;
+                }
             }
         }
         this.openIssueList = openIssues;

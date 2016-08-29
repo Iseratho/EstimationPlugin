@@ -1,10 +1,11 @@
-package org.catrobat.estimationplugin.misc;
+package org.catrobat.estimationplugin.issue;
 
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.changehistory.ChangeHistory;
 import com.atlassian.jira.issue.changehistory.ChangeHistoryManager;
 import com.atlassian.jira.user.ApplicationUser;
+import org.catrobat.estimationplugin.misc.DebugAnnotation;
 import org.ofbiz.core.entity.GenericValue;
 
 import java.sql.Timestamp;

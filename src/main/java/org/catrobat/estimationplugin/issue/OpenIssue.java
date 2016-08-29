@@ -1,4 +1,4 @@
-package org.catrobat.estimationplugin.misc;
+package org.catrobat.estimationplugin.issue;
 
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.CustomFieldManager;
@@ -10,10 +10,8 @@ import com.atlassian.jira.issue.fields.CustomField;
 import org.catrobat.estimationplugin.helper.HtmlHelper;
 import org.ofbiz.core.entity.GenericValue;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 public class OpenIssue {

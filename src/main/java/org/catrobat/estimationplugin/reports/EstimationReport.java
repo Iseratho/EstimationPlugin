@@ -13,6 +13,7 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import org.apache.log4j.Logger;
 import org.catrobat.estimationplugin.calc.EstimationCalculator;
 import org.catrobat.estimationplugin.helper.GroupHelper;
+import org.catrobat.estimationplugin.misc.ReportParams;
 
 import java.util.Map;
 
@@ -50,21 +51,25 @@ public class EstimationReport extends AbstractReport {
             numprog = (long) GroupHelper.getCountOfGroup(userGroup);
         }
 
-        EstimationCalculator estimationCalculator = new EstimationCalculator(searchProvider, remoteUser, formatterFactory);
+        ReportParams reportParams = new ReportParams(searchProvider, remoteUser, formatterFactory);
+
+        EstimationCalculator estimationCalculator = new EstimationCalculator(reportParams);
         Map<String, Object> velocityParams;
 
         if (filterOrProjectId.startsWith("project-")) {
             projectId = Long.parseLong(filterOrProjectId.replaceFirst("project-", ""));
-            velocityParams = estimationCalculator.calculateOutputParams(projectId, false);
+            reportParams.setConfigureParams(false, projectId, numprog);
         } else if (filterOrProjectId.startsWith("filter-")) {
             filterId = Long.parseLong(filterOrProjectId.replaceFirst("filter-", ""));
-            velocityParams = estimationCalculator.calculateOutputParams(filterId, true);
+            reportParams.setConfigureParams(true, filterId, numprog);
         } else if(filterOrProjectId.equals("")) {
             projectId = ParameterUtils.getLongParam(params, "selectedProjectId");
-            velocityParams = estimationCalculator.calculateOutputParams(projectId, false);
-        } else {   
+            reportParams.setConfigureParams(false, projectId, numprog);
+        } else {
             throw new AssertionError("neither project nor filter id");
         }
+
+        velocityParams = estimationCalculator.calculateOutputParams();
 
         velocityParams.put("projectName", projectManager.getProjectObj(projectId).getName());
         velocityParams.put("countMember", numprog);
