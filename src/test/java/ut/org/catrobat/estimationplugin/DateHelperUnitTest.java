@@ -47,6 +47,6 @@ public class DateHelperUnitTest {
         long testval = 5;
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, (int)testval);
-        assertEquals(DateHelper.daysUntil(cal.getTime()), testval);
+        assertEquals(testval, DateHelper.daysUntil(cal.getTime()));
     }
 }

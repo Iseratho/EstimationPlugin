@@ -61,12 +61,6 @@
         <type>select</type>
         <values class="org.catrobat.estimationplugin.valuegenerator.GroupValuesGenerator"/>
       </property>
-      <property>
-        <key>ldap</key>
-        <name>estimation-report.ldap</name>
-        <description>estimation-report.ldap.description</description>
-        <type>user</type>
-      </property>
       <!--<property>
         <key>include</key>
         <name>estimation-report.include</name>

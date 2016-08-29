@@ -8,6 +8,7 @@ import com.atlassian.jira.util.ParameterUtils;
 import com.atlassian.jira.web.action.ProjectActionSupport;
 import com.atlassian.jira.project.ProjectManager;
 import org.catrobat.estimationplugin.calc.BackwardCalculator;
+import org.catrobat.estimationplugin.misc.ReportParams;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -32,25 +33,27 @@ public class EstimationPluginBackward extends AbstractReport {
         //TODO make work for non current project or filter
 
         ApplicationUser applicationUser = projectActionSupport.getLoggedInApplicationUser();
-        BackwardCalculator backwardCalculator = new BackwardCalculator(searchProvider, applicationUser);
+
+        ReportParams reportParams = new ReportParams(searchProvider, applicationUser, formatterFactory);
 
         Long filterId = new Long(0);
         String filterOrProjectId = ParameterUtils.getStringParam(params, "projectid");
         if (filterOrProjectId.startsWith("project-")) {
             projectId = Long.parseLong(filterOrProjectId.replaceFirst("project-", ""));
-            velocityParams = backwardCalculator.calculateOutputParams(projectId, false, finishDate);
+            reportParams.setConfigureParams(false, projectId, new Long(0));
         } else if (filterOrProjectId.startsWith("filter-")) {
             filterId = Long.parseLong(filterOrProjectId.replaceFirst("filter-", ""));
-            velocityParams = backwardCalculator.calculateOutputParams(filterId, true, finishDate);
+            reportParams.setConfigureParams(true, filterId, new Long(0));
         } else if(filterOrProjectId.equals("")) {
             projectId = ParameterUtils.getLongParam(params, "selectedProjectId");
-            velocityParams = backwardCalculator.calculateOutputParams(projectId, false, finishDate);
+            reportParams.setConfigureParams(false, projectId, new Long(0));
         } else {
             throw new AssertionError("neither project nor filter id");
         }
 
-        backwardCalculator.calculateOutputParams(projectId, false, finishDate);
+        BackwardCalculator backwardCalculator = new BackwardCalculator(reportParams);
 
+        velocityParams = backwardCalculator.calculateOutputParams(finishDate);
 
         velocityParams.put("projectName", projectManager.getProjectObj(projectId).getName());
         return descriptor.getHtml("view", velocityParams);

@@ -12,6 +12,7 @@ import com.atlassian.jira.web.action.ProjectActionSupport;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import org.apache.log4j.Logger;
 import org.catrobat.estimationplugin.calc.MonthlyTickets;
+import org.catrobat.estimationplugin.misc.ReportParams;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -44,7 +45,9 @@ public class MonthlyResolutionReport extends AbstractReport {
         ApplicationUser remoteUser = action.getLoggedInApplicationUser();
         Long projectId = ParameterUtils.getLongParam(params, "selectedProjectId");
 
-        MonthlyTickets monthlyTickets = new MonthlyTickets(searchProvider, remoteUser, formatterFactory);
+        ReportParams reportParams = new ReportParams(searchProvider, remoteUser, formatterFactory);
+        reportParams.setConfigureParams(false, projectId, new Long(0));
+        MonthlyTickets monthlyTickets = new MonthlyTickets(reportParams);
         String startDateString = ParameterUtils.getStringParam(params, "startDate");
         if (!startDateString.equals("")) {
             DateFormat dateFormat = new SimpleDateFormat("d/MMM/yy");
@@ -64,7 +67,7 @@ public class MonthlyResolutionReport extends AbstractReport {
             }
         }
         Map<String, Object> velocityParams;
-        velocityParams = monthlyTickets.getTicketsPerMonth(projectId, false);
+        velocityParams = monthlyTickets.getTicketsPerMonth();
 
         return descriptor.getHtml("view", velocityParams);
     }

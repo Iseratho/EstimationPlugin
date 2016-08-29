@@ -9,6 +9,7 @@ import com.atlassian.jira.user.ApplicationUser;
 import org.catrobat.estimationplugin.jql.IssueListCreator;
 import org.catrobat.estimationplugin.issue.FinishedIssueList;
 import org.catrobat.estimationplugin.issue.OpenIssueList;
+import org.catrobat.estimationplugin.misc.ReportParams;
 
 import java.util.*;
 
@@ -16,21 +17,13 @@ public class BackwardCalculator {
 
     private IssueListCreator issueListCreator;
 
-    private List<String> openIssuesStatus = new ArrayList<String>();
-    private List<String> finishedIssuesStatus = new ArrayList<String>();
 
-    public BackwardCalculator(SearchProvider searchProvider, ApplicationUser user) {
-        issueListCreator = new IssueListCreator(searchProvider, user);
-        loadSettings();
-    }
 
-    private void loadSettings() {
-        // TODO: change initialisation to Admin
-        openIssuesStatus.add("Backlog");
-        openIssuesStatus.add("Open");
-        openIssuesStatus.add("In Progress");
-        finishedIssuesStatus.add("Closed");
-        CustomFieldManager customFieldManager = ComponentAccessor.getCustomFieldManager();
+    private ReportParams reportParams;
+
+    public BackwardCalculator(ReportParams reportParams) {
+        this.reportParams = reportParams;
+        issueListCreator = new IssueListCreator(reportParams.getSearchProvider(), reportParams.getRemoteUser());
     }
 
     public Map<String, Object> prepareMap(OpenIssueList openIssueList, FinishedIssueList finishedIssueList, Date deadline) {
@@ -44,9 +37,9 @@ public class BackwardCalculator {
         return data;
     }
 
-    public Map<String, Object> calculateOutputParams(Long projectOrFilterId, boolean isFilter, Date deadline) throws SearchException {
-        List<Issue> openIssueList = issueListCreator.getIssueListForStatus(projectOrFilterId, openIssuesStatus, isFilter);
-        List<Issue> finishedIssueList = issueListCreator.getIssueListForStatus(projectOrFilterId, finishedIssuesStatus, isFilter);
+    public Map<String, Object> calculateOutputParams(Date deadline) throws SearchException {
+        List<Issue> openIssueList = issueListCreator.getIssueListForStatus(reportParams.getProjectOrFilterId(), reportParams.getOpenIssuesStatus(), reportParams.isFilter());
+        List<Issue> finishedIssueList = issueListCreator.getIssueListForStatus(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter());
         OpenIssueList openIssueListClass = new OpenIssueList(openIssueList);
         FinishedIssueList finishedIssueListClass = new FinishedIssueList(finishedIssueList);
         return prepareMap(openIssueListClass, finishedIssueListClass, deadline);
