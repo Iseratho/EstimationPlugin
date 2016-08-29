@@ -1,6 +1,7 @@
 package org.catrobat.estimationplugin.helper;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class DateHelper {
 
@@ -55,5 +56,11 @@ public class DateHelper {
 
     public static long convertMillisToDays(long millis) {
         return millis/(1000 * 60 * 60 * 24);
+    }
+
+    /* Source from: http://stackoverflow.com/questions/1555262/calculating-the-difference-between-two-java-date-instances */
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
     }
 }

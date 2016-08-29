@@ -26,12 +26,12 @@ public class FinishedIssue {
 
     private void extractData() {
         created = new Date(issue.getCreated().getTime());
-        workStarted = new Date(getDatePutIntoBacklog(issue).getTime());
+        workStarted = getDateOfStatusTransition("Issues Pool", "Backlog");
         workFinished = new Date(issue.getResolutionDate().getTime());
         workDuration = workFinished.getTime() - workStarted.getTime();
     }
 
-    private Timestamp getDatePutIntoBacklog(Issue issue) {
+    private Date getDateOfStatusTransition(String oldStatus, String newStatus) {
         ChangeHistoryManager changeHistoryManager = ComponentAccessor.getChangeHistoryManager();
         List<ChangeHistory> issueHistory = changeHistoryManager.getChangeHistories(issue);
         for(ChangeHistory changeHistory : issueHistory) {
@@ -40,14 +40,14 @@ public class FinishedIssue {
                 String field = genericValue.getString("field");
                 String oldstring = genericValue.getString("oldstring");
                 String newstring = genericValue.getString("newstring");
-                if (field.equals("status") && oldstring.equals("Issues Pool") && newstring.equals("Backlog")) {
+                if (field.equals("status") && oldstring.equals(oldStatus) && newstring.equals(newStatus)) {
                     Timestamp changedToIssuePool = changeHistory.getTimePerformed();
-                    return changedToIssuePool;
+                    return new Date(changedToIssuePool.getTime());
                 }
             }
         }
         // TODO: this is ugly fix, so items which where never put into backlog, have 0 days worked on
-        return issue.getResolutionDate();
+        return new Date(issue.getResolutionDate().getTime());
     }
 
     public Date getCreated() {

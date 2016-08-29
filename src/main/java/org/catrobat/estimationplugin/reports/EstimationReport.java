@@ -62,14 +62,12 @@ public class EstimationReport extends AbstractReport {
         } else if(filterOrProjectId.equals("")) {
             projectId = ParameterUtils.getLongParam(params, "selectedProjectId");
             velocityParams = estimationCalculator.calculateOutputParams(projectId, false);
-        } else {
+        } else {   
             throw new AssertionError("neither project nor filter id");
         }
 
         velocityParams.put("projectName", projectManager.getProjectObj(projectId).getName());
-        velocityParams.put("filter", "TESTVAL");
         velocityParams.put("countMember", numprog);
-        velocityParams.put("comparisonMethod", "STANDARD");
         velocityParams.put("probability", new Float(0));
         velocityParams.put("deviation", new Float(0));
 

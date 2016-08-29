@@ -5,8 +5,10 @@ import com.atlassian.jira.issue.CustomFieldManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.customfields.option.Option;
 import com.atlassian.jira.issue.fields.CustomField;
+import org.catrobat.estimationplugin.helper.DateHelper;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class OpenIssueList {
 
@@ -67,5 +69,17 @@ public class OpenIssueList {
             oldestIssues.add(openIssues.get(i).getHTMLLink());
         }
         return oldestIssues;
+    }
+
+    public void removeOutliers(long daysSince, String statusString) {
+        List<OpenIssue> openIssues = new ArrayList<>(openIssueList);
+        for (OpenIssue openIssue : openIssueList) {
+            Date inStatusSince = openIssue.getDatePutIntoStatus(statusString);
+            long diff = DateHelper.getDateDiff(inStatusSince, new Date(), TimeUnit.DAYS);
+            if (diff > daysSince) {
+                openIssues.remove(openIssue);
+            }
+        }
+        this.openIssueList = openIssues;
     }
 }

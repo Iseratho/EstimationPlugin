@@ -10,7 +10,6 @@ import com.atlassian.jira.issue.customfields.option.Option;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchProvider;
-import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.user.ApplicationUser;
 import com.google.gson.Gson;
 import org.catrobat.estimationplugin.helper.DateHelper;
@@ -110,6 +109,7 @@ public class EstimationCalculator {
         List<Issue> finishedIssueList = issueListCreator.getIssueListForStatus(projectOrFilterId, finishedIssuesStatus, isFilter);
         finishedIssueListClass = new FinishedIssueList(finishedIssueList);
         openIssueListClass = new OpenIssueList(openIssueList);
+        openIssueListClass.removeOutliers(365, "Backlog");
         costMap = getMapOfEffortsFromIssueListForCustomField(openIssueList, estimationField);
         smlMap = getMapOfEffortsFromIssueListForCustomField(openIssueList, estimationSMLField);
 

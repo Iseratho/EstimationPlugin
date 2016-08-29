@@ -1,6 +1,7 @@
 package org.catrobat.estimationplugin.misc;
 
 import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.user.ApplicationUser;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.catrobat.estimationplugin.helper.DateHelper;
@@ -121,13 +122,24 @@ public class FinishedIssueList {
         return stringOfParticipatingUsers;
     }
 
-    //TODO calculation is bullshit
     public double getAverageWorkingStudents() {
         long projectDuration = getProjectDurationFromStart();
         long workDurationTimesMembers = 0;
         for(FinishedIssue finishedIssue : finishedIssueList) {
             workDurationTimesMembers += finishedIssue.getWorkDuration() * finishedIssue.getUsersParticipatingCount();
         }
-        return DateHelper.convertMillisToDays(workDurationTimesMembers)/(double)projectDuration;
+        return (DateHelper.convertMillisToDays(workDurationTimesMembers)/(double)projectDuration)/getIssueOverlappingFactor();
+    }
+
+    public long getTotalWorkDurationBasedOnAverageDurationPerStudent() {
+        long totalWorkDurationPerStudent = 0;
+        for(FinishedIssue finishedIssue : finishedIssueList) {
+            totalWorkDurationPerStudent += finishedIssue.getWorkDuration() / finishedIssue.getUsersParticipatingCount();
+        }
+        return DateHelper.convertMillisToDays(totalWorkDurationPerStudent);
+    }
+
+    public double getAverageWorkDurationPerStudent() {
+        return getTotalWorkDurationBasedOnAverageDurationPerStudent()/(double)getFinishedIssueCount();
     }
 }

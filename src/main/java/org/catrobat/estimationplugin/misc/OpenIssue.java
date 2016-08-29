@@ -3,14 +3,18 @@ package org.catrobat.estimationplugin.misc;
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.CustomFieldManager;
 import com.atlassian.jira.issue.Issue;
+import com.atlassian.jira.issue.changehistory.ChangeHistory;
+import com.atlassian.jira.issue.changehistory.ChangeHistoryManager;
 import com.atlassian.jira.issue.customfields.option.Option;
 import com.atlassian.jira.issue.fields.CustomField;
 import org.catrobat.estimationplugin.helper.HtmlHelper;
+import org.ofbiz.core.entity.GenericValue;
 
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class OpenIssue {
 
@@ -55,6 +59,23 @@ public class OpenIssue {
         return HtmlHelper.getHtmlLink(url, issue.getKey(), issue.getDescription());
     }
 
+    public Timestamp getDatePutIntoStatus(String newStatus) {
+        ChangeHistoryManager changeHistoryManager = ComponentAccessor.getChangeHistoryManager();
+        List<ChangeHistory> issueHistory = changeHistoryManager.getChangeHistories(issue);
+        for(ChangeHistory changeHistory : issueHistory) {
+            List<GenericValue> changeItem = changeHistory.getChangeItems();
+            for(GenericValue genericValue : changeItem) {
+                String field = genericValue.getString("field");
+                String newstring = genericValue.getString("newstring");
+                if (field.equals("status") && newstring.equals(newStatus)) {
+                    Timestamp changedToIssuePool = changeHistory.getTimePerformed();
+                    return changedToIssuePool;
+                }
+            }
+        }
+        // TODO: this is ugly fix, so items which where never put into backlog, have 0 days worked on
+        return issue.getResolutionDate();
+    }
 
     static class CreatedComparator implements Comparator<OpenIssue> {
 

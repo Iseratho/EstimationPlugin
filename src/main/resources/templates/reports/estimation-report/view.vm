@@ -7,13 +7,10 @@ $webResourceManager.requireResourcesForContext("estimationplugin")
 </h4>
 <p>
 $i18n.getText('estimation-report.prognosis') $i18n.getText('estimation-report.for')
-$projectName $i18n.getText('estimation-report.filter') $filter
+$projectName
 </p>
 <p>
 $i18n.getText('estimation-report.for') $countMember $i18n.getText('estimation-report.member')
-</p>
-<p>
-$i18n.getText('estimation-report.for') $comparisonMethod $i18n.getText('estimation-report.comparisonmethod')
 </p>
 <p>
 Project is expected to finish on: $finishDate (currently having $openIssues openIssues with $openCost Cost).
