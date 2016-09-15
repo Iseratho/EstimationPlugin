@@ -6,6 +6,8 @@ import org.catrobat.estimationplugin.helper.DateHelper;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -44,11 +46,33 @@ public class DateHelperUnitTest {
     }
 
     // Test is sometimes faulty
-    @Ignore
+    @Test
     public void testDaysUntil() {
         long testval = 5;
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, (int)testval);
         assertEquals(testval, DateHelper.daysUntil(cal.getTime()));
+    }
+
+    @Test
+    public void testGetXUnitsEarlierFromNow() {
+        LocalDate today = LocalDate.now();
+        LocalDate targetDate = LocalDate.of(2016, 9, 10);
+        long days = targetDate.until(today, ChronoUnit.DAYS);
+        Date output = DateHelper.getXUnitsEarlierFromNow(days, ChronoUnit.DAYS);
+        assertEquals(DateHelper.toDate(targetDate), output);
+    }
+
+    @Test
+    public void testConvertMillisToDays() {
+        long millis = 1000 * 60 * 60 * 24 - 1;
+        long output = DateHelper.convertMillisToDays(millis);
+        assertEquals(0, output);
+        millis = 1000 * 60 * 60 * 24 + 1;
+        output = DateHelper.convertMillisToDays(millis);
+        assertEquals(1, output);
+        millis = 86400000L * 34L;
+        output = DateHelper.convertMillisToDays(millis);
+        assertEquals(34, output);
     }
 }

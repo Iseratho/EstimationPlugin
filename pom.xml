@@ -171,9 +171,9 @@
                     <targetTests>
                         <param>ut.org.catrobat.estimationplugin.*</param>
                     </targetTests>
-                    <excludedClasses>
+                    <!--excludedClasses>
                         <excludedClass>org.catrobat.estimationplugin.helper.DateHelper</excludedClass>
-                    </excludedClasses>
+                    </excludedClasses-->
                 </configuration>
             </plugin>
         </plugins>

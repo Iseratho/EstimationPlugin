@@ -29,7 +29,7 @@ public class StatisticsHelper {
         NormalDistribution normalDistribution = new NormalDistribution(mean, sd);
         long startValue = Math.round(mean) - ((MAX_STEPS-1)/2)*usedStepSize;
         long endValue = Math.round(mean) + ((MAX_STEPS-1)/2)*usedStepSize;
-        for(long i = startValue; i < endValue; i+=usedStepSize) {
+        for(long i = startValue; i <= endValue; i+=usedStepSize) {
             double stepProbability;
             if (cumulative) {
                 stepProbability = normalDistribution.cumulativeProbability(i) * 100;

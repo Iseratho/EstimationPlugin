@@ -26,6 +26,7 @@ public class ReportParams {
     private Long numProgrammers;
     private TimeConsidered timeConsidered;
     private long lastx;
+    private TicketsOrCost ticketsOrCost;
 
     // Params from admin interface
     private boolean removeOutliersEnabled;
@@ -90,6 +91,7 @@ public class ReportParams {
 
     private void loadStaticVariables() {
         numProgrammersEnabled = true;
+        ticketsOrCost = TicketsOrCost.TICKETS;
     }
 
     public SearchProvider getSearchProvider() {

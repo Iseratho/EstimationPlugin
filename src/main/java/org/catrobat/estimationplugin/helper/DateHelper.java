@@ -1,7 +1,6 @@
 package org.catrobat.estimationplugin.helper;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -54,13 +53,21 @@ public class DateHelper {
         return dateList;
     }
 
-    public static long daysUntil(Date targetDate) {
+    /*public static long daysUntilOld(Date targetDate) {
         long millis = targetDate.getTime() - (new Date()).getTime();
         return convertMillisToDays(millis);
+    }*/
+
+    public static long daysUntil(Date targetDate) {
+        LocalDate targetLocalDate = DateHelper.toLocalDate(targetDate);
+        LocalDate today = LocalDate.now();
+        long days = today.until(targetLocalDate, ChronoUnit.DAYS);
+        return days;
     }
 
     public static long convertMillisToDays(long millis) {
-        return millis/(1000 * 60 * 60 * 24);
+        long conversion = 86400000L;//1000 * 60L * 60 * 24
+        return millis/conversion;
     }
 
     /* Source from: http://stackoverflow.com/questions/1555262/calculating-the-difference-between-two-java-date-instances */
@@ -72,6 +79,14 @@ public class DateHelper {
     public static Date getXUnitsEarlierFromNow(long amountToSubstract, TemporalUnit temporalUnit) {
         LocalDate localDate = LocalDate.now();
         localDate = localDate.minus(amountToSubstract, temporalUnit);
+        return DateHelper.toDate(localDate);
+    }
+
+    public static LocalDate toLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static Date toDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }
