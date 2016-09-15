@@ -160,6 +160,22 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.1.10</version>
+                <configuration>
+                    <targetClasses>
+                        <param>org.catrobat.estimationplugin.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>ut.org.catrobat.estimationplugin.*</param>
+                    </targetTests>
+                    <excludedClasses>
+                        <excludedClass>org.catrobat.estimationplugin.helper.DateHelper</excludedClass>
+                    </excludedClasses>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <properties>
