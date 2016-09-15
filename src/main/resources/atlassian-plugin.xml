@@ -87,6 +87,13 @@
         <type>select</type>
         <values class="org.catrobat.estimationplugin.valuegenerator.EstimationParamValuesGenerator"/>
       </property>
+      <property>
+        <key>lastx</key>
+        <name>estimation-report.lastx</name>
+        <description>estimation-report.lastx.description</description>
+        <type>long</type>
+        <default>0</default>
+      </property>
       <!--<property>
         <key>startDate</key>
         <name>estimation-report.startdate</name>

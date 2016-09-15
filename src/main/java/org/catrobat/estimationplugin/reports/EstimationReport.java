@@ -53,9 +53,6 @@ public class EstimationReport extends AbstractReport {
 
         ReportParams reportParams = new ReportParams(searchProvider, remoteUser, formatterFactory);
 
-        EstimationCalculator estimationCalculator = new EstimationCalculator(reportParams);
-        Map<String, Object> velocityParams;
-
         if (filterOrProjectId.startsWith("project-")) {
             projectId = Long.parseLong(filterOrProjectId.replaceFirst("project-", ""));
             reportParams.setConfigureParams(false, projectId, numprog);
@@ -68,6 +65,13 @@ public class EstimationReport extends AbstractReport {
         } else {
             throw new AssertionError("neither project nor filter id");
         }
+
+        String timeConsidered = ParameterUtils.getStringParam(params, "basedon");
+        Long lastX = ParameterUtils.getLongParam(params, "lastx");
+        reportParams.setTimeConsideredParams(timeConsidered, lastX);
+
+        EstimationCalculator estimationCalculator = new EstimationCalculator(reportParams);
+        Map<String, Object> velocityParams;
 
         velocityParams = estimationCalculator.calculateOutputParams();
 

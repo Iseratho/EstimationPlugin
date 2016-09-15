@@ -7,13 +7,17 @@ import com.atlassian.jira.issue.customfields.option.Option;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.search.SearchException;
 import com.google.gson.Gson;
+import org.apache.commons.lang.NotImplementedException;
 import org.catrobat.estimationplugin.helper.DateHelper;
 import org.catrobat.estimationplugin.helper.StatisticsHelper;
 import org.catrobat.estimationplugin.jql.IssueListCreator;
 import org.catrobat.estimationplugin.issue.FinishedIssueList;
 import org.catrobat.estimationplugin.issue.OpenIssueList;
 import org.catrobat.estimationplugin.misc.ReportParams;
+import org.catrobat.estimationplugin.misc.TimeConsidered;
 
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 
@@ -88,7 +92,37 @@ public class EstimationCalculator {
 
     public Map<String, Object> calculateOutputParams() throws SearchException {
         List<Issue> openIssueList = issueListCreator.getIssueListForStatus(reportParams.getProjectOrFilterId(), reportParams.getOpenIssuesStatus(), reportParams.isFilter());
-        List<Issue> finishedIssueList = issueListCreator.getIssueListForStatus(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter());
+        List<Issue> finishedIssueList;
+        Date startDate;
+        switch (reportParams.getTimeConsidered()) {
+            case WHOLE_TIME:
+                finishedIssueList = issueListCreator.getIssueListForStatus(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter());
+                break;
+            case LAST_DAYS:
+                startDate = DateHelper.getXUnitsEarlierFromNow(reportParams.getLastx(), ChronoUnit.DAYS);
+                finishedIssueList = issueListCreator.getIssueListForStatusResolvedBetween(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter(),
+                        startDate, new Date());
+                break;
+            case LAST_WEEKS:
+                startDate = DateHelper.getXUnitsEarlierFromNow(reportParams.getLastx(), ChronoUnit.WEEKS);
+                finishedIssueList = issueListCreator.getIssueListForStatusResolvedBetween(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter(),
+                        startDate, new Date());
+                break;
+            case LAST_MONTHS:
+                startDate = DateHelper.getXUnitsEarlierFromNow(reportParams.getLastx(), ChronoUnit.MONTHS);
+                finishedIssueList = issueListCreator.getIssueListForStatusResolvedBetween(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter(),
+                        startDate, new Date());
+                break;
+            case LAST_YEARS:
+                startDate = DateHelper.getXUnitsEarlierFromNow(reportParams.getLastx(), ChronoUnit.YEARS);
+                finishedIssueList = issueListCreator.getIssueListForStatusResolvedBetween(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter(),
+                        startDate, new Date());
+                break;
+            default:
+                finishedIssueList = issueListCreator.getIssueListForStatus(reportParams.getProjectOrFilterId(), reportParams.getFinishedIssuesStatus(), reportParams.isFilter());
+            case SAME_AS_YEAR_BEFORE:
+                throw new NotImplementedException();
+        }
         finishedIssueListClass = new FinishedIssueList(finishedIssueList);
         openIssueListClass = new OpenIssueList(openIssueList);
         if (reportParams.isRemoveOutliersEnabled()) {

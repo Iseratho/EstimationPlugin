@@ -7,8 +7,11 @@ import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.user.ApplicationUser;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 
 public class ReportParams {
 
@@ -21,6 +24,8 @@ public class ReportParams {
     private boolean isFilter;
     private Long projectOrFilterId;
     private Long numProgrammers;
+    private TimeConsidered timeConsidered;
+    private long lastx;
 
     // Params from admin interface
     private boolean removeOutliersEnabled;
@@ -43,11 +48,30 @@ public class ReportParams {
         loadStaticVariables();
     }
 
+    /*
+    public ReportParams(SearchProvider searchProvider, ApplicationUser remoteUser, DateTimeFormatterFactory formatterFactory, Map params) {
+        this.searchProvider = searchProvider;
+        this.remoteUser = remoteUser;
+        this.formatterFactory = formatterFactory;
+        loadReportParamsFromAdminInterface();
+        loadStaticVariables();
+        loadConfigureParams(params);
+    }*/
+
     public void setConfigureParams(boolean isFilter, Long projectOrFilterId, Long numProgrammers) {
         this.isFilter = isFilter;
         this.projectOrFilterId = projectOrFilterId;
         this.numProgrammers = numProgrammers;
     }
+
+    public void setTimeConsideredParams(String timeConsidered, Long lastx) {
+        this.timeConsidered = TimeConsidered.valueOf(timeConsidered);
+        this.lastx = lastx;
+    }
+
+    /*public void loadConfigureParams(Map params) {
+
+    }*/
 
     private void loadReportParamsFromAdminInterface() {
         // TODO: connection to Admin interface
@@ -123,4 +147,13 @@ public class ReportParams {
     public boolean isNumProgrammersEnabled() {
         return numProgrammersEnabled;
     }
+
+    public TimeConsidered getTimeConsidered() {
+        return timeConsidered;
+    }
+
+    public long getLastx() {
+        return lastx;
+    }
+
 }

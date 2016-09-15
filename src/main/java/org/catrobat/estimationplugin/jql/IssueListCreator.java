@@ -73,6 +73,13 @@ public class IssueListCreator {
         return  issueList;
     }
 
+    public List<Issue> getIssueListForStatusResolvedBetween(Long projectOrFilterId, List<String> status, boolean isFilter, Date startDate, Date endDate) throws SearchException {
+        Query query = getQueryWithIssueStatusResolvedBetween(projectOrFilterId, status, isFilter, startDate, endDate);
+        SearchResults searchResults = searchProvider.search(query, user, PagerFilter.getUnlimitedFilter());
+        List<Issue> issueList = searchResults.getIssues();
+        return  issueList;
+    }
+
     public String getQueryLog() {
         return queryLog.toString();
     }

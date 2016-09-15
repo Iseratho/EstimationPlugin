@@ -1,5 +1,10 @@
 package org.catrobat.estimationplugin.helper;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -62,5 +67,11 @@ public class DateHelper {
     public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
         long diffInMillies = date2.getTime() - date1.getTime();
         return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    }
+
+    public static Date getXUnitsEarlierFromNow(long amountToSubstract, TemporalUnit temporalUnit) {
+        LocalDate localDate = LocalDate.now();
+        localDate = localDate.minus(amountToSubstract, temporalUnit);
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }
